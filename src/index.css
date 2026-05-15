@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@layer base {
+  input,
+  textarea {
+    @apply block w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md mb-2 px-3 py-2 transition duration-300 focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow;
+  }
+
+  h1 {
+    @apply text-4xl font-bold mb-4;
+  }
+}
+
+.btn {
+  @apply inline-block transition duration-250 font-medium cursor-pointer rounded-md ms-2 px-4 py-2 bg-gray-50 border border-slate-200 hover:border-violet-400 focus:ring-2 focus:ring-violet-500/40;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+}
