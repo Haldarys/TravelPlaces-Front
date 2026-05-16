@@ -54,7 +54,6 @@ export default function Explore() {
 
   function onLocationSelect(location: Location) {
     setSelectedLocation(location);
-    console.log(location.name);
   }
 
   function onLocationClose() {
@@ -65,7 +64,13 @@ export default function Explore() {
     <div className="relative h-full">
       {/* Map */}
       <div className="absolute inset-0">
-        <ExploreMap locationMarkers={mapVisibleLocations} onChange={handleMapChange} />
+        <ExploreMap
+          locationMarkers={mapVisibleLocations}
+          selectedLocation={selectedLocation}
+          onChange={handleMapChange}
+          onLocationSelect={onLocationSelect}
+          onLocationClose={onLocationClose}
+        />
       </div>
 
       {/* Left Panel */}

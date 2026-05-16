@@ -15,6 +15,24 @@
   @apply inline-block transition duration-250 font-medium cursor-pointer rounded-md ms-2 px-4 py-2 bg-gray-50 border border-slate-200 hover:border-violet-400 focus:ring-2 focus:ring-violet-500/40;
 }
 
+.leaflet-tooltip {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--color-red-600) !important;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-shadow:
+    -1px 0 white,
+    0 1px white,
+    1px 0 white,
+    0 -1px white;
+}
+
+.leaflet-tooltip-right::before {
+  display: none;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

@@ -3,8 +3,8 @@ import type { Location } from "../types/location";
 import {
   MapContainer,
   Marker,
-  Popup,
   TileLayer,
+  Tooltip,
   useMap,
   useMapEvents,
   ZoomControl,
@@ -16,9 +16,10 @@ import markerBlue from "../assets/map/marker-blue.png";
 
 type MapEventHandlerProps = {
   onChange: (bounds: L.LatLngBounds) => void;
+  onClick: () => void;
 };
 
-function MapEventHandler({ onChange }: MapEventHandlerProps) {
+function MapEventHandler({ onChange, onClick }: MapEventHandlerProps) {
   const map = useMap();
 
   useEffect(() => {
@@ -29,6 +30,7 @@ function MapEventHandler({ onChange }: MapEventHandlerProps) {
   useMapEvents({
     moveend: (e) => onChange(e.target.getBounds()),
     zoomend: (e) => onChange(e.target.getBounds()),
+    click: () => onClick(),
   });
 
   return null;
@@ -39,19 +41,36 @@ const redPinIcon = new L.Icon({
   iconUrl: markerRed,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
+  // popupAnchor: [0, -30],
 });
 const bluePinIcon = new L.Icon({
   iconUrl: markerBlue,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
+  // popupAnchor: [0, -30],
+});
+const selectedPinIcon = new L.Icon({
+  iconUrl: markerRed,
+  iconSize: [35, 57],
+  iconAnchor: [18, 57],
+  // popupAnchor: [0, -42],
 });
 
 type ExploreMapProps = {
   locationMarkers?: (Location & { isSearchResult?: boolean })[];
+  selectedLocation?: Location;
   onChange: (bounds: L.LatLngBounds) => void;
+  onLocationSelect: (location: Location) => void;
+  onLocationClose: () => void;
 };
 
-export default function ExploreMap({ locationMarkers, onChange }: ExploreMapProps) {
+export default function ExploreMap({
+  locationMarkers,
+  selectedLocation,
+  onChange,
+  onLocationSelect,
+  onLocationClose,
+}: ExploreMapProps) {
   return (
     <MapContainer
       center={[48.866667, 2.333333]}
@@ -64,17 +83,34 @@ export default function ExploreMap({ locationMarkers, onChange }: ExploreMapProp
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       />
       <ZoomControl position="topright" />
-      <MapEventHandler onChange={onChange} />
+      <MapEventHandler onChange={onChange} onClick={onLocationClose} />
 
-      {locationMarkers?.map((loc) => (
-        <Marker
-          position={[loc.latitude, loc.longitude]}
-          key={loc.id}
-          icon={loc.isSearchResult ? redPinIcon : bluePinIcon}
-        >
-          <Popup>{loc.name}</Popup>
-        </Marker>
-      ))}
+      {locationMarkers?.map((loc) => {
+        const iconToShow =
+          loc.id == selectedLocation?.id
+            ? selectedPinIcon
+            : loc.isSearchResult
+              ? redPinIcon
+              : bluePinIcon;
+        const popupYOffset = -iconToShow.options.iconSize[1] * 0.9;
+        console.log(popupYOffset + " " + loc.name);
+        return (
+          <Marker
+            position={[loc.latitude, loc.longitude]}
+            key={loc.id}
+            icon={iconToShow}
+            eventHandlers={{
+              click: () => onLocationSelect(loc),
+            }}
+          >
+            {selectedLocation?.id === loc.id && (
+              <Tooltip permanent direction="right" offset={[10, -25]} className="location-label">
+                {loc.name}
+              </Tooltip>
+            )}
+          </Marker>
+        );
+      })}
     </MapContainer>
   );
 }
