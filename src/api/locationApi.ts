@@ -75,3 +75,14 @@ export async function deleteLocation(id: number): Promise<void> {
     method: "DELETE",
   });
 }
+
+export async function uploadLocationImage(id: number, file: File) {
+  const formData = new FormData();
+
+  formData.append("file", file);
+
+  await fetch(`${API_URL}/${id}/images`, {
+    method: "POST",
+    body: formData,
+  });
+}
