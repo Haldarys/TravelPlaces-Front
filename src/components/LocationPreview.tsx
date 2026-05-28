@@ -5,6 +5,7 @@ import { getCountryName } from "../utils/Localization";
 type Props = {
   location: Location;
   onClose: () => void;
+  onEdit: () => void;
 };
 
 const externalRefConfig: Record<string, { label: string; url: (id: string) => string }> = {
@@ -22,7 +23,7 @@ const externalRefConfig: Record<string, { label: string; url: (id: string) => st
   },
 };
 
-export default function LocationPreview({ location, onClose }: Props) {
+export default function LocationPreview({ location, onClose, onEdit }: Props) {
   const [tagsExpanded, setTagsExpanded] = useState(false);
 
   const visibleTags = tagsExpanded ? location.tags : location.tags.slice(0, 3);
@@ -52,6 +53,12 @@ export default function LocationPreview({ location, onClose }: Props) {
             ⏴
           </button>
           <div className="flex gap-1">
+            <button
+              onClick={onEdit}
+              className="bg-black/40 text-white p-1.5 rounded-full backdrop-blur-sm hover:bg-black/60"
+            >
+              ✎
+            </button>
             <button className="bg-black/40 text-white p-1.5 rounded-full backdrop-blur-sm hover:bg-black/60">
               ♡
             </button>

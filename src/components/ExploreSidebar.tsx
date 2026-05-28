@@ -10,6 +10,7 @@ type ExploreSidebarProps = {
   onSearch: (value: string) => void;
   onLocationSelect: (location: Location) => void;
   onLocationClose: () => void;
+  onLocationEdit: () => void;
 };
 
 export default function ExploreSidebar({
@@ -18,6 +19,7 @@ export default function ExploreSidebar({
   onSearch,
   onLocationSelect,
   onLocationClose,
+  onLocationEdit,
 }: ExploreSidebarProps) {
   const [searchInput, setSearchInput] = useState("");
 
@@ -33,7 +35,11 @@ export default function ExploreSidebar({
       )}
     >
       {selectedLocation ? (
-        <LocationPreview location={selectedLocation} onClose={onLocationClose} />
+        <LocationPreview
+          location={selectedLocation}
+          onClose={onLocationClose}
+          onEdit={onLocationEdit}
+        />
       ) : (
         <div>
           {/* Search */}

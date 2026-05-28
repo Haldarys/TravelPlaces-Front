@@ -1,18 +1,32 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import type { Location } from "../types/location";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { Location, LocationFormData } from "../types/location";
 import ExploreMap from "../components/ExploreMap";
-import { fetchLocationsByBounds, fetchLocationsBySearch } from "../api/locationApi";
+import { fetchLocationsByBounds, fetchLocationsBySearch, updateLocation } from "../api/locationApi";
 import { useEffect, useState } from "react";
 import L from "leaflet";
 import FetchIndicator from "../components/ui/FetchIndicator";
 import ExploreSidebar from "../components/ExploreSidebar";
+import Modal from "../components/Modal";
+import LocationForm from "../components/LocationForm";
 
 export default function Explore() {
+  const queryClient = useQueryClient();
+
   const [bounds, setBounds] = useState<L.LatLngBounds | null>(null);
   const [debouncedBounds, setDebouncedBounds] = useState(bounds);
 
   const [currentSearch, setCurrentSearch] = useState("");
   const [selectedLocation, setSelectedLocation] = useState<Location>();
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const mutation = useMutation({
+    mutationFn: (data: LocationFormData) => updateLocation(selectedLocation!.id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["locations"] });
+      setIsEditModalOpen(false);
+    },
+  });
 
   useEffect(() => {
     const delay = setTimeout(() => {
@@ -60,6 +74,14 @@ export default function Explore() {
     setSelectedLocation(undefined);
   }
 
+  function onLocationEdit() {
+    setIsEditModalOpen(true);
+  }
+
+  function handleSubmitLocationEdit(submitData: LocationFormData) {
+    mutation.mutate(submitData);
+  }
+
   return (
     <div className="relative h-full">
       {/* Map */}
@@ -73,6 +95,10 @@ export default function Explore() {
         />
       </div>
 
+      <div className="absolute bottom-10 right-10 z-1000">
+        <FetchIndicator isPending={boundsLocations.isPending} error={boundsLocations.error} />
+      </div>
+
       {/* Left Panel */}
       <ExploreSidebar
         locations={sidebarVisibleLocations}
@@ -82,11 +108,23 @@ export default function Explore() {
         }}
         onLocationSelect={onLocationSelect}
         onLocationClose={onLocationClose}
+        onLocationEdit={onLocationEdit}
       />
 
-      <div className="absolute bottom-10 right-10 z-1000">
-        <FetchIndicator isPending={boundsLocations.isPending} error={boundsLocations.error} />
-      </div>
+      {selectedLocation && isEditModalOpen && (
+        <Modal
+          onClose={() => {
+            setIsEditModalOpen((current) => !current);
+          }}
+        >
+          <h1>Titre</h1>
+          <LocationForm
+            initialData={selectedLocation}
+            onSubmit={handleSubmitLocationEdit}
+            isPending={mutation.isPending}
+          />
+        </Modal>
+      )}
     </div>
   );
 }
