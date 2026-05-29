@@ -1,7 +1,11 @@
 import { ApiError } from "../types/apiError";
-import type { Location, LocationFormData, LocationSearchOptions } from "../types/location";
-
-const API_URL = import.meta.env.VITE_TRAVELPLACES_API_URL;
+import type {
+  Location,
+  LocationFormData,
+  LocationImage,
+  LocationSearchOptions,
+} from "../types/location";
+import { API_URL } from "../config";
 
 export async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(url, {

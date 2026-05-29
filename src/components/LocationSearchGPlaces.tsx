@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 import type { LocationFormData } from "../types/location";
 import { useCombobox } from "downshift";
+import { GOOGLE_PLACES_API_KEY } from "../config";
 
 type Props = {
   onSelect: (data: LocationFormData) => void;
@@ -16,7 +17,7 @@ export default function LocationSearchGPlaces({ onSelect }: Props) {
 
   // Init Google Places API
   useEffect(() => {
-    const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
+    const apiKey = GOOGLE_PLACES_API_KEY;
 
     setOptions({
       key: apiKey,
