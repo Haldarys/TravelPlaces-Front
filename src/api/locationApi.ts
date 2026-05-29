@@ -80,6 +80,10 @@ export async function deleteLocation(id: number): Promise<void> {
   });
 }
 
+export async function fetchLocationImages(id: number): Promise<LocationImage[]> {
+  return apiFetch<LocationImage[]>(`${API_URL}/locations/${id}/images`);
+}
+
 export async function uploadLocationImage(id: number, file: File) {
   const formData = new FormData();
 

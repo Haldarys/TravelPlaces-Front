@@ -1,13 +1,19 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Location, LocationFormData } from "../types/location";
 import ExploreMap from "../components/ExploreMap";
-import { fetchLocationsByBounds, fetchLocationsBySearch, updateLocation } from "../api/locationApi";
+import {
+  fetchLocationById,
+  fetchLocationsByBounds,
+  fetchLocationsBySearch,
+  updateLocation,
+} from "../api/locationApi";
 import { useEffect, useState } from "react";
 import L from "leaflet";
 import FetchIndicator from "../components/ui/FetchIndicator";
 import ExploreSidebar from "../components/ExploreSidebar";
 import Modal from "../components/Modal";
 import LocationForm from "../components/LocationForm";
+import LocationImagesManager from "../components/LocationImagesManager";
 
 export default function Explore() {
   const queryClient = useQueryClient();
@@ -16,12 +22,12 @@ export default function Explore() {
   const [debouncedBounds, setDebouncedBounds] = useState(bounds);
 
   const [currentSearch, setCurrentSearch] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState<Location>();
+  const [selectedLocationId, setSelectedLocationId] = useState<number | null>(null);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const mutation = useMutation({
-    mutationFn: (data: LocationFormData) => updateLocation(selectedLocation!.id, data),
+    mutationFn: (data: LocationFormData) => updateLocation(selectedLocation.data!.id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["locations"] });
       setIsEditModalOpen(false);
@@ -44,10 +50,16 @@ export default function Explore() {
   });
 
   const searchedLocations = useQuery<Location[]>({
-    queryKey: ["Locations", "search", currentSearch],
+    queryKey: ["locations", "search", currentSearch],
     queryFn: () => fetchLocationsBySearch({ name: currentSearch }),
     enabled: currentSearch != "",
     initialData: [],
+  });
+
+  const selectedLocation = useQuery<Location>({
+    queryKey: ["locations", "location", selectedLocationId],
+    queryFn: () => fetchLocationById(selectedLocationId!),
+    enabled: selectedLocationId !== null,
   });
 
   const filteredBoundsLocations =
@@ -67,11 +79,11 @@ export default function Explore() {
   }
 
   function onLocationSelect(location: Location) {
-    setSelectedLocation(location);
+    setSelectedLocationId(location.id);
   }
 
   function onLocationClose() {
-    setSelectedLocation(undefined);
+    setSelectedLocationId(0);
   }
 
   function onLocationEdit() {
@@ -88,7 +100,7 @@ export default function Explore() {
       <div className="absolute inset-0">
         <ExploreMap
           locationMarkers={mapVisibleLocations}
-          selectedLocation={selectedLocation}
+          selectedLocation={selectedLocation.data}
           onChange={handleMapChange}
           onLocationSelect={onLocationSelect}
           onLocationClose={onLocationClose}
@@ -102,7 +114,7 @@ export default function Explore() {
       {/* Left Panel */}
       <ExploreSidebar
         locations={sidebarVisibleLocations}
-        selectedLocation={selectedLocation}
+        selectedLocation={selectedLocation.data}
         onSearch={(value) => {
           setCurrentSearch(value);
         }}
@@ -111,15 +123,19 @@ export default function Explore() {
         onLocationEdit={onLocationEdit}
       />
 
-      {selectedLocation && isEditModalOpen && (
+      {selectedLocation.data && isEditModalOpen && (
         <Modal
           onClose={() => {
-            setIsEditModalOpen((current) => !current);
+            setIsEditModalOpen(false);
           }}
         >
-          <h1>Titre</h1>
+          <h1>{selectedLocation.data.name}</h1>
+          <LocationImagesManager
+            locationId={selectedLocation.data.id}
+            images={selectedLocation.data.images}
+          />
           <LocationForm
-            initialData={selectedLocation}
+            initialData={selectedLocation.data}
             onSubmit={handleSubmitLocationEdit}
             isPending={mutation.isPending}
           />

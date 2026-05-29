@@ -23,7 +23,10 @@ export default function Modal({ onClose, children }: Props) {
       role="dialog"
       aria-modal="true"
     >
-      <div ref={modalRef} className="bg-white rounded-lg w-2/3 max-h-[90vh] overflow-y-auto p-6">
+      <div
+        ref={modalRef}
+        className="bg-white rounded-lg min-w-1/3 max-h-2/3 text-center overflow-y-auto p-6"
+      >
         {children}
       </div>
     </div>

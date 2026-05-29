@@ -11,9 +11,10 @@ export interface Location {
   externalRefs: Record<string, string>;
   createdAt: string;
   updatedAt?: string;
+  images: LocationImage[];
 }
 
-export type LocationFormData = Omit<Location, "id" | "createdAt" | "updatedAt">;
+export type LocationFormData = Omit<Location, "id" | "createdAt" | "updatedAt" | "images">;
 
 export type LocationSearchOptions = {
   name?: string;
@@ -21,4 +22,13 @@ export type LocationSearchOptions = {
   address?: string;
   city?: string;
   countryCode?: string;
+};
+
+export type LocationImage = {
+  id: number;
+  location: string;
+  filename: string;
+  mimeType: string;
+  position: number;
+  createdAt: string;
 };
