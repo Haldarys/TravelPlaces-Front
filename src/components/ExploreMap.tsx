@@ -92,8 +92,7 @@ export default function ExploreMap({
             : loc.isSearchResult
               ? redPinIcon
               : bluePinIcon;
-        const popupYOffset = -iconToShow.options.iconSize[1] * 0.9;
-        console.log(popupYOffset + " " + loc.name);
+
         return (
           <Marker
             position={[loc.latitude, loc.longitude]}

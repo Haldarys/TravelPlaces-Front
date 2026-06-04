@@ -29,6 +29,10 @@ export async function apiFetch<T>(url: string, options?: RequestInit): Promise<T
     throw new ApiError(response, message);
   }
 
+  if (response.status === 204 || response.headers.get("Content-Length") === "0") {
+    return undefined as T;
+  }
+
   return response.json();
 }
 
@@ -92,5 +96,11 @@ export async function uploadLocationImage(id: number, file: File) {
   await fetch(`${API_URL}/${id}/images`, {
     method: "POST",
     body: formData,
+  });
+}
+
+export async function deleteLocationImage(locationId: number, imageId: number): Promise<void> {
+  await apiFetch<void>(`${API_URL}/${locationId}/images/${imageId}`, {
+    method: "DELETE",
   });
 }
