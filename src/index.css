@@ -9,10 +9,10 @@
   h1 {
     @apply text-4xl font-bold mb-4;
   }
-}
 
-.btn {
-  @apply inline-block transition duration-250 font-medium cursor-pointer rounded-md ms-2 px-4 py-2 bg-gray-50 border border-slate-200 hover:border-violet-400 focus:ring-2 focus:ring-violet-500/40;
+  .btn {
+    @apply inline-block transition duration-250 font-medium cursor-pointer rounded-md ms-2 px-4 py-2 bg-gray-50 border border-slate-200 hover:border-violet-400 focus:ring-2 focus:ring-violet-500/40;
+  }
 }
 
 .leaflet-tooltip {

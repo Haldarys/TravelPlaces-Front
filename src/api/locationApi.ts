@@ -104,3 +104,13 @@ export async function deleteLocationImage(locationId: number, imageId: number): 
     method: "DELETE",
   });
 }
+
+export async function reorderLocationImage(
+  locationId: number,
+  images: { id: number; position: number }[],
+): Promise<void> {
+  await apiFetch<void>(`${API_URL}/${locationId}/images`, {
+    method: "PATCH",
+    body: JSON.stringify(images),
+  });
+}
