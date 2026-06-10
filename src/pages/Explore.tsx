@@ -108,7 +108,7 @@ export default function Explore() {
       </div>
 
       <div className="absolute bottom-10 right-10 z-1000">
-        <FetchIndicator isPending={boundsLocations.isPending} error={boundsLocations.error} />
+        <FetchIndicator isPending={boundsLocations.isFetching} error={boundsLocations.error} />
       </div>
 
       {/* Left Panel */}
