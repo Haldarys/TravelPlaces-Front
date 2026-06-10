@@ -12,8 +12,10 @@ function App() {
   return (
     <>
       <div className="h-screen w-screen flex flex-col">
-        {/* Navigation simple */}
-        <NavBar></NavBar>
+        <header>
+          {/* Navigation simple */}
+          <NavBar></NavBar>
+        </header>
 
         <main
           className="flex flex-col items-center flex-1
