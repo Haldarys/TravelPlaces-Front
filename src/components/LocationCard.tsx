@@ -7,6 +7,11 @@ type Props = {
 };
 
 export default function LocationCard({ location, onClick }: Props) {
+  const googlePlaceId = location.externalRefs?.google_place_id;
+  const googleMapsUrl = googlePlaceId
+    ? `https://www.google.com/maps/place/?q=place_id:${googlePlaceId}`
+    : null;
+
   return (
     <div
       className="relative h-40 rounded-md overflow-hidden shrink-0 cursor-pointer group"
@@ -31,9 +36,16 @@ export default function LocationCard({ location, onClick }: Props) {
           <button className="bg-black/40 text-white p-1 rounded-md backdrop-blur-xs hover:bg-black/60">
             {/* action 1 */}♡
           </button>
-          <button className="bg-black/40 text-white p-1 rounded-md backdrop-blur-xs hover:bg-black/60">
-            {/* action 2 */}↗
-          </button>
+          {googleMapsUrl && (
+            <a
+              href={googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-black/40 text-white p-1.5 rounded-full backdrop-blur-sm hover:bg-black/60"
+            >
+              ↗
+            </a>
+          )}
         </div>
       </div>
 
