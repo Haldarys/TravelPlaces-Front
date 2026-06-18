@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Location } from "../types/location";
 import LocationCard from "./LocationCard";
 import LocationPreview from "./LocationPreview";
@@ -24,6 +24,10 @@ export default function ExploreSidebar({
   const [searchInput, setSearchInput] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  useEffect(() => {
+    if (selectedLocation) setIsSidebarOpen(true);
+  }, [selectedLocation]);
+
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setSearchInput(e.target.value);
   }
@@ -31,11 +35,11 @@ export default function ExploreSidebar({
   return (
     <div
       className={clsx(
-        "fixed bottom-0 left-0 right-0 bg-white/80 z-1000 rounded-t-md overflow-y-auto transition-all duration-200",
+        "fixed bottom-0 left-0 right-0 bg-white/80 z-1000 rounded-t-3xl overflow-y-auto transition-all duration-200",
         "sm:absolute sm:top-6 sm:left-6 sm:bottom-6 sm:w-80 sm:rounded-md sm:h-auto",
         { "sm:w-120": selectedLocation },
         { "h-24": !isSidebarOpen },
-        { "h-1/2": isSidebarOpen },
+        { "h-1/2": isSidebarOpen || selectedLocation },
       )}
     >
       {selectedLocation ? (

@@ -107,7 +107,7 @@ export default function Explore() {
         />
       </div>
 
-      <div className="absolute bottom-10 right-10 z-1000">
+      <div className="absolute z-1000 s max-sm:top-4 max-sm:left-4 sm:top sm:bottom-10 sm:right-10">
         <FetchIndicator isPending={boundsLocations.isFetching} error={boundsLocations.error} />
       </div>
 
