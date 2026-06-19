@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Location } from "../types/location";
 import { fetchLocations, deleteLocation } from "../api/locationApi";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function LocationList() {
   const queryClient = useQueryClient();
@@ -16,7 +17,10 @@ export default function LocationList() {
   // Mutation delete
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteLocation(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["locations"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["locations"] });
+      toast("Le lieu a bien été supprimé");
+    },
   });
 
   if (isPending) return <p>Chargement...</p>;

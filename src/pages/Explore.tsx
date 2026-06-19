@@ -14,6 +14,7 @@ import ExploreSidebar from "../components/ExploreSidebar";
 import Modal from "../components/Modal";
 import LocationForm from "../components/LocationForm";
 import LocationImagesManager from "../components/LocationImagesManager";
+import { toast } from "react-toastify";
 
 export default function Explore() {
   const queryClient = useQueryClient();
@@ -28,8 +29,9 @@ export default function Explore() {
 
   const mutation = useMutation({
     mutationFn: (data: LocationFormData) => updateLocation(selectedLocation.data!.id, data),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["locations"] });
+      toast(`Le lieu '${data.name}' a bien été modifié`);
       setIsEditModalOpen(false);
     },
   });

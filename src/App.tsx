@@ -7,6 +7,7 @@ import LocationEdit from "./pages/LocationEdit";
 import AdminLayout from "./components/layout/AdminLayout";
 import FullscreenLayout from "./components/layout/FullscreenLayout";
 import Explore from "./pages/Explore";
+import { ToastContainer, Slide } from "react-toastify";
 
 function App() {
   return (
@@ -35,6 +36,16 @@ function App() {
             </Route>
           </Routes>
         </main>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          closeOnClick={true}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Slide}
+        />
       </div>
     </>
   );

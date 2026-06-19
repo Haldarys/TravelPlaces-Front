@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createLocation } from "../api/locationApi";
 import LocationForm from "../components/LocationForm";
 import type { LocationFormData } from "../types/location";
+import { toast } from "react-toastify";
 
 export default function LocationCreate() {
   const queryClient = useQueryClient();
@@ -12,6 +13,7 @@ export default function LocationCreate() {
     mutationFn: createLocation,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["locations"] });
+      toast(`Le lieu '${data.name}' a bien été créé`);
       navigate(`/locations/${data.id}`);
     },
   });

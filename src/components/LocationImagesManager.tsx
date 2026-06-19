@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { Sortable } from "./ui/Sortable";
 import { DragDropProvider } from "@dnd-kit/react";
 import { isSortable } from "@dnd-kit/react/sortable";
+import { toast } from "react-toastify";
 
 type Props = {
   locationId: number;
@@ -30,6 +31,7 @@ export default function LocationImagesManager({ locationId, images }: Props) {
     mutationFn: (imageId: number) => deleteLocationImage(locationId, imageId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["locations", "location", locationId] });
+      toast("Image supprimée avec succès");
     },
   });
 
@@ -37,6 +39,7 @@ export default function LocationImagesManager({ locationId, images }: Props) {
     mutationFn: (file: File) => uploadLocationImage(locationId, file),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["locations", "location", locationId] });
+      toast("Image uploadée avec succès");
     },
   });
 
@@ -45,6 +48,7 @@ export default function LocationImagesManager({ locationId, images }: Props) {
       reorderLocationImage(locationId, toUpdate),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["locations", "location", locationId] });
+      toast("Ordre sauvegardé");
     },
   });
 
@@ -65,7 +69,6 @@ export default function LocationImagesManager({ locationId, images }: Props) {
           onDragEnd={(event) => {
             if (event.canceled) return;
             const { source } = event.operation;
-            console.log(localImages);
 
             if (isSortable(source)) {
               const { initialIndex, index } = source;

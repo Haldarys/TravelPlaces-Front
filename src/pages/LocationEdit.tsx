@@ -4,6 +4,7 @@ import { fetchLocationById, updateLocation } from "../api/locationApi";
 import LocationForm from "../components/LocationForm";
 import { useParams } from "react-router-dom";
 import type { Location, LocationFormData } from "../types/location";
+import { toast } from "react-toastify";
 
 export default function LocationEdit() {
   const queryClient = useQueryClient();
@@ -20,8 +21,9 @@ export default function LocationEdit() {
 
   const mutation = useMutation({
     mutationFn: (data: LocationFormData) => updateLocation(numericId, data),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["locations"] });
+      toast(`Le lieu '${data.name}' a bien été modifié`);
       navigate(`/locations/${numericId}`);
     },
   });
