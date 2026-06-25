@@ -31,7 +31,6 @@ export default function LocationImagesManager({ locationId, images }: Props) {
     mutationFn: (imageId: number) => deleteLocationImage(locationId, imageId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["locations", "location", locationId] });
-      toast("Image supprimée avec succès");
     },
   });
 
@@ -39,7 +38,6 @@ export default function LocationImagesManager({ locationId, images }: Props) {
     mutationFn: (file: File) => uploadLocationImage(locationId, file),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["locations", "location", locationId] });
-      toast("Image uploadée avec succès");
     },
   });
 
@@ -48,7 +46,6 @@ export default function LocationImagesManager({ locationId, images }: Props) {
       reorderLocationImage(locationId, toUpdate),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["locations", "location", locationId] });
-      toast("Ordre sauvegardé");
     },
   });
 
@@ -59,7 +56,27 @@ export default function LocationImagesManager({ locationId, images }: Props) {
         toUpdate.push({ id: image.id, position: index });
       }
     });
-    reorderMutation.mutate(toUpdate);
+    toast.promise(reorderMutation.mutateAsync(toUpdate), {
+      pending: "Enregistrement...",
+      success: "Ordre sauvegardé",
+      error: "Erreur lors de l'enregistement",
+    });
+  };
+
+  const handleDeleteImage = (id: number) => {
+    toast.promise(deleteMutation.mutateAsync(id), {
+      pending: "Supression...",
+      success: "Image supprimée avec succès",
+      error: "Erreur lors de la supression",
+    });
+  };
+
+  const handleUploadImage = (file: File) => {
+    toast.promise(uploadMutation.mutateAsync(file), {
+      pending: "Enregistrement de l'image...",
+      success: "Image uploadée avec succès",
+      error: "Erreur lors de l'upload de l'image",
+    });
   };
 
   return (
@@ -97,7 +114,7 @@ export default function LocationImagesManager({ locationId, images }: Props) {
                 />
                 <button
                   onClick={() => {
-                    deleteMutation.mutate(image.id);
+                    handleDeleteImage(image.id);
                   }}
                   className="absolute top-1 right-1 bg-black/50 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
                 >
@@ -121,7 +138,7 @@ export default function LocationImagesManager({ locationId, images }: Props) {
               className="hidden"
               onChange={(e) => {
                 const file = e.target.files?.[0];
-                if (file) uploadMutation.mutate(file);
+                if (file) handleUploadImage(file);
                 if (inputRef.current) inputRef.current.value = "";
               }}
             />

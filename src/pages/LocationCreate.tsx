@@ -13,13 +13,20 @@ export default function LocationCreate() {
     mutationFn: createLocation,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["locations"] });
-      toast(`Le lieu '${data.name}' a bien été créé`);
       navigate(`/locations/${data.id}`);
     },
   });
 
   function handleSubmit(data: LocationFormData) {
-    mutation.mutate(data);
+    toast.promise(mutation.mutateAsync(data), {
+      pending: "Enregistrement...",
+      success: {
+        render({ data }) {
+          return `Le lieu '${data.name}' a bien été créé`;
+        },
+      },
+      error: "Erreur lors de l'enregistement",
+    });
   }
 
   return (

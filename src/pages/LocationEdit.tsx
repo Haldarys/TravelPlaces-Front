@@ -23,7 +23,6 @@ export default function LocationEdit() {
     mutationFn: (data: LocationFormData) => updateLocation(numericId, data),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["locations"] });
-      toast(`Le lieu '${data.name}' a bien été modifié`);
       navigate(`/locations/${numericId}`);
     },
   });
@@ -36,7 +35,15 @@ export default function LocationEdit() {
   const { createdAt, updatedAt, id: _id, ...formData } = data;
 
   function handleSubmit(submitData: LocationFormData) {
-    mutation.mutate(submitData);
+    toast.promise(mutation.mutateAsync(submitData), {
+      pending: "Enregistrement...",
+      success: {
+        render({ data }) {
+          return `Le lieu '${data.name}' a bien été modifié`;
+        },
+      },
+      error: "Erreur lors de l'enregistement",
+    });
   }
 
   return (

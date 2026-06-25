@@ -19,9 +19,16 @@ export default function LocationList() {
     mutationFn: (id: number) => deleteLocation(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["locations"] });
-      toast("Le lieu a bien été supprimé");
     },
   });
+
+  const handleDeleteLocation = (id: number) => {
+    toast.promise(deleteMutation.mutateAsync(id), {
+      pending: "Suppression...",
+      success: "Le lieu a bien été supprimé",
+      error: "Erreur lors de la suppression",
+    });
+  };
 
   if (isPending) return <p>Chargement...</p>;
   if (error) return <p>Erreur lors du chargement</p>;
@@ -35,7 +42,7 @@ export default function LocationList() {
             {loc.name} ({loc.latitude}, {loc.longitude})
             <button
               onClick={() => {
-                deleteMutation.mutate(loc.id);
+                handleDeleteLocation(loc.id);
               }}
               className="btn"
             >

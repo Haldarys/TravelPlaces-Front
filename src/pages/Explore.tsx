@@ -29,9 +29,8 @@ export default function Explore() {
 
   const mutation = useMutation({
     mutationFn: (data: LocationFormData) => updateLocation(selectedLocation.data!.id, data),
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["locations"] });
-      toast(`Le lieu '${data.name}' a bien été modifié`);
       setIsEditModalOpen(false);
     },
   });
@@ -93,7 +92,15 @@ export default function Explore() {
   }
 
   function handleSubmitLocationEdit(submitData: LocationFormData) {
-    mutation.mutate(submitData);
+    toast.promise(mutation.mutateAsync(submitData), {
+      pending: "Enregistrement...",
+      success: {
+        render({ data }) {
+          return `Le lieu '${data.name}' a bien été modifié`;
+        },
+      },
+      error: "Erreur lors de l'enregistement",
+    });
   }
 
   return (
