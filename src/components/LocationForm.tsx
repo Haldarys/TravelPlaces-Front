@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { LocationFormData } from "../types/location";
 import LocationSearchGPlaces from "./LocationSearchGPlaces";
+import { XIcon } from "@phosphor-icons/react";
 const EXTERNAL_REFS = ["google_place_id", "wikidata_id", "osm_node_id"];
 
 interface LocationFormProps {
@@ -142,7 +143,7 @@ export default function LocationForm({ initialData, onSubmit, isPending }: Locat
             {formData.tags.map((tag) => (
               <span
                 key={tag}
-                className="flex items-center gap-1 bg-gray-100 text-gray-700 text-sm px-2 py-0.5 rounded-full border border-gray-200"
+                className="flex items-center gap-1 bg-gray-100 text-gray-700 text-sm px-2 py-1 rounded-full border border-gray-200"
               >
                 {tag}
                 <button
@@ -150,7 +151,7 @@ export default function LocationForm({ initialData, onSubmit, isPending }: Locat
                   onClick={() => handleRemoveTag(tag)}
                   className="text-gray-400 hover:text-gray-700"
                 >
-                  ×
+                  <XIcon />
                 </button>
               </span>
             ))}
@@ -182,7 +183,7 @@ export default function LocationForm({ initialData, onSubmit, isPending }: Locat
                 onClick={() => handleRemoveRef(key)}
                 className="text-gray-400 hover:text-gray-700"
               >
-                ×
+                <XIcon />
               </button>
             </div>
           ))}

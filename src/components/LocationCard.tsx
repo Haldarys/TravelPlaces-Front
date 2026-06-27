@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon, HeartIcon } from "@phosphor-icons/react";
 import type { Location } from "../types/location";
 import { getCountryName } from "../utils/Localization";
 
@@ -33,17 +34,18 @@ export default function LocationCard({ location, onClick }: Props) {
           {location.countryCode ? getCountryName(location.countryCode) : "-"}
         </span>
         <div className="flex gap-1">
-          <button className="bg-black/40 text-white p-1 rounded-md backdrop-blur-xs hover:bg-black/60">
-            {/* action 1 */}♡
+          <button className="bg-black/40 text-white p-2 rounded-full backdrop-blur-xs hover:bg-black/60">
+            {/* action 1 */}
+            <HeartIcon />
           </button>
           {googleMapsUrl && (
             <a
               href={googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-black/40 text-white p-1.5 rounded-full backdrop-blur-sm hover:bg-black/60"
+              className="bg-black/40 text-white p-2 rounded-full backdrop-blur-sm hover:bg-black/60"
             >
-              ↗
+              <ArrowUpRightIcon />
             </a>
           )}
         </div>

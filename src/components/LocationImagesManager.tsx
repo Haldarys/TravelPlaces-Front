@@ -7,6 +7,7 @@ import { Sortable } from "./ui/Sortable";
 import { DragDropProvider } from "@dnd-kit/react";
 import { isSortable } from "@dnd-kit/react/sortable";
 import { toast } from "react-toastify";
+import { PlusIcon, XIcon } from "@phosphor-icons/react";
 
 type Props = {
   locationId: number;
@@ -116,9 +117,9 @@ export default function LocationImagesManager({ locationId, images }: Props) {
                   onClick={() => {
                     handleDeleteImage(image.id);
                   }}
-                  className="absolute top-1 right-1 bg-black/50 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
+                  className="absolute top-1.5 right-1.5 bg-black/40 text-white p-2 rounded-full backdrop-blur-sm hover:bg-black/60"
                 >
-                  ✕
+                  <XIcon />
                 </button>
               </div>
             </Sortable>
@@ -142,7 +143,9 @@ export default function LocationImagesManager({ locationId, images }: Props) {
                 if (inputRef.current) inputRef.current.value = "";
               }}
             />
-            <span className="text-2xl text-slate-400">+</span>
+            <span className="text-slate-400">
+              <PlusIcon size={24} />
+            </span>
           </div>
           {hasOrderChanged && (
             <button className="btn ms-0 mt-2 shrink-0" onClick={handleSaveOrder}>

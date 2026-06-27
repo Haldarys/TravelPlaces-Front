@@ -1,6 +1,12 @@
 import { useState } from "react";
 import type { Location } from "../types/location";
 import { getCountryName } from "../utils/Localization";
+import {
+  ArrowUpRightIcon,
+  CaretLeftIcon,
+  HeartIcon,
+  PencilSimpleIcon,
+} from "@phosphor-icons/react";
 
 type Props = {
   location: Location;
@@ -48,28 +54,28 @@ export default function LocationPreview({ location, onClose, onEdit }: Props) {
         <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
           <button
             onClick={onClose}
-            className="bg-black/40 text-white p-1.5 rounded-full backdrop-blur-sm hover:bg-black/60"
+            className="bg-black/40 text-white p-2 rounded-full backdrop-blur-sm hover:bg-black/60"
           >
-            ⏴
+            <CaretLeftIcon />
           </button>
           <div className="flex gap-1">
             <button
               onClick={onEdit}
-              className="bg-black/40 text-white p-1.5 rounded-full backdrop-blur-sm hover:bg-black/60"
+              className="bg-black/40 text-white p-2 rounded-full backdrop-blur-sm hover:bg-black/60"
             >
-              ✎
+              <PencilSimpleIcon />
             </button>
-            <button className="bg-black/40 text-white p-1.5 rounded-full backdrop-blur-sm hover:bg-black/60">
-              ♡
+            <button className="bg-black/40 text-white p-2 rounded-full backdrop-blur-sm hover:bg-black/60">
+              <HeartIcon />
             </button>
             {googleMapsUrl && (
               <a
                 href={googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-black/40 text-white p-1.5 rounded-full backdrop-blur-sm hover:bg-black/60"
+                className="bg-black/40 text-white p-2 rounded-full backdrop-blur-sm hover:bg-black/60"
               >
-                ↗
+                <ArrowUpRightIcon />
               </a>
             )}
           </div>

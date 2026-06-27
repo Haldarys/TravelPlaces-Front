@@ -1,6 +1,7 @@
 import { NavLink, type NavLinkRenderProps } from "react-router-dom";
 import clsx from "clsx";
 import { useRef, useState } from "react";
+import { ListIcon, XIcon } from "@phosphor-icons/react";
 
 export default function NavBar() {
   const navRef = useRef(null);
@@ -27,32 +28,8 @@ export default function NavBar() {
           >
             <span className="absolute -inset-0.5"></span>
             <span className="sr-only">Open main menu</span>
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              data-slot="icon"
-              aria-hidden="true"
-              className="size-6 in-aria-expanded:hidden"
-            >
-              <path
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              data-slot="icon"
-              aria-hidden="true"
-              className="size-6 not-in-aria-expanded:hidden"
-            >
-              <path d="M6 18 18 6M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+            <ListIcon size={24} className="in-aria-expanded:hidden" />
+            <XIcon size={24} className="not-in-aria-expanded:hidden" />
           </button>
         </div>
         <div className="flex shrink-0 items-center">
